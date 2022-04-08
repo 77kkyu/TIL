@@ -26,6 +26,17 @@ JPA에서 Entity내부에 @Version Annotation을 사용하여 변수를 구현�
     커밋하기 전에 다시 한번 Version을 체크해 Version이 1인걸 확인하면 예외를 발생합니다.
 5. OptimisticLockException 발생
 
+``` java
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+private Long memberNo;
+
+private String name;
+
+@Version // 낙관적락
+private int version;
+```
+
 ---
 
 # 비관적 잠금 (Pessimistic Lock)
@@ -42,6 +53,12 @@ JPA에서 Entity내부에 @Version Annotation을 사용하여 변수를 구현�
   - 배타적 잠금 
 - PESSIMISTIC_FORCE_INCREMENT
   - Version 정보를 사용하는 비관적 락
+
+``` java
+entityManager.find(Pmember.class, 3L, LockModeType.PESSIMISTIC_WRITE); // lock
+// LockModeType.PESSIMISTIC_READ 반복 읽기만 가능
+// LockModeType.PESSIMISTIC_FORCE_INCREMENT Version과 관련
+```
 
 ---
 
