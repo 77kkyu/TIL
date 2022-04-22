@@ -26,9 +26,12 @@ public class MemberEntityManager {
                 .build();
 
         entityManager.persist(member);
+        entityManager.flush();
 
         //Member memberSave = memberRepository.save(member);
         //System.out.println(memberSave.getName());
+        Member findByMember = entityManager.find(Member.class, 13L);
+        System.out.println("member name : " + findByMember.getName());
     }
 
     @Transactional
