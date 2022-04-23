@@ -21,17 +21,23 @@ public class MemberEntityManager {
     @Transactional
     @Test
     public void 데이터저장() {
-        Member member = Member.builder() // 비영속(new/transient)
-                .name("77kkyu")
-                .build();
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("member");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
 
-        entityManager.persist(member);
-        entityManager.flush();
-
-        //Member memberSave = memberRepository.save(member);
-        //System.out.println(memberSave.getName());
-        Member findByMember = entityManager.find(Member.class, 13L);
-        System.out.println("member name : " + findByMember.getName());
+        transaction.begin();
+        try{
+            Member member = Member.builder() // 비영속(new/transient)
+                    .name("77kkyu111")
+                    .build();
+            entityManager.persist(member); // 영구저장
+            transaction.commit(); // 커밋
+        }catch (Exception e){
+            transaction.rollback();
+        }finally {
+            entityManager.close();
+        }
+        entityManagerFactory.close();
     }
 
     @Transactional
