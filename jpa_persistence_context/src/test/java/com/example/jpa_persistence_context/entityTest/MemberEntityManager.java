@@ -20,11 +20,10 @@ public class MemberEntityManager {
 
     @Transactional
     @Test
-    public void 데이터저장() {
+    public void 데이터저장_영속성() {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("member");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-
         transaction.begin();
         try{
             Member member = Member.builder() // 비영속(new/transient)
@@ -38,6 +37,16 @@ public class MemberEntityManager {
             entityManager.close();
         }
         entityManagerFactory.close();
+    }
+
+    @Test
+    public void 준영속성테스트() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("member");
+        EntityManager em = emf.createEntityManager();
+
+        Member findMember = em.find(Member.class, 3L);
+        em.detach(findMember); // 영속성 컨테스트에 분리해 준영속성으로 변경
+
     }
 
     @Transactional
@@ -67,20 +76,6 @@ public class MemberEntityManager {
         //Member member = em.find(Member.class, 13L);
         Member member1 = entityManager.find(Member.class, 14L);
         System.out.println(member1.getName());
-
-    }
-
-    @Test
-    public void 준영속성테스트() {
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("Member");
-        EntityManager em = emf.createEntityManager();
-
-        Member member = Member.builder() // 비영속(new/transient)
-                .name("77kkyu")
-                .build();
-
-        em.detach(member);
 
     }
 
