@@ -31,9 +31,9 @@ public class MemberEntityManager {
                     .build();
             entityManager.persist(member); // 영구저장
             transaction.commit(); // 커밋
-        }catch (Exception e){
+        } catch (Exception e){
             transaction.rollback();
-        }finally {
+        } finally {
             entityManager.close();
         }
         entityManagerFactory.close();
@@ -41,11 +41,23 @@ public class MemberEntityManager {
 
     @Test
     public void 준영속성테스트() {
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("member");
         EntityManager em = emf.createEntityManager();
 
+        long beforeTime = System.currentTimeMillis();
+        em.find(Member.class, 3L);
+        long afterTime = System.currentTimeMillis();
+        long secDiffTime = (afterTime - beforeTime)/1000;
+        System.out.println("시간차이(m) : "+secDiffTime);
+
         Member findMember = em.find(Member.class, 3L);
         em.detach(findMember); // 영속성 컨테스트에 분리해 준영속성으로 변경
+        long beforeTime1 = System.currentTimeMillis();
+        em.find(Member.class, 3L);
+        long afterTime1 = System.currentTimeMillis();
+        long secDiffTime1 = (afterTime1 - beforeTime1)/1000;
+        System.out.println("시간차이(m)1 : "+secDiffTime1);
 
     }
 
