@@ -53,6 +53,8 @@ public class MemberEntityManager {
 
         Member findMember = em.find(Member.class, 3L);
         em.detach(findMember); // 영속성 컨테스트에 분리해 준영속성으로 변경
+        // em.claer(); // 영속성 콘텍스트를 비워도 관리되던 엔티티는 준영속 상태가 된다.
+        // em.close(); // 영속성 콘텍스트를 종료해도 관리되던 엔티티는 준영속 상태가 된다.
         long beforeTime1 = System.currentTimeMillis();
         em.find(Member.class, 3L);
         long afterTime1 = System.currentTimeMillis();
