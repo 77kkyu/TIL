@@ -93,8 +93,25 @@ public class MemberEntityManager {
 
     }
 
+    @Transactional
     @Test
     public void 삭제테스트() {
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("member");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+        transaction.begin();
+        try{
+
+            Member member = entityManager.find(Member.class, 4L);
+            entityManager.remove(member);
+            transaction.commit(); // 커밋
+        } catch (Exception e){
+            transaction.rollback();
+        } finally {
+            entityManager.close();
+        }
+        entityManagerFactory.close();
 
     }
 
