@@ -24,14 +24,14 @@ public class MemberEntityManager {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("member");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        try{
+        try {
+            transaction.begin();
             Member member = Member.builder() // 비영속(new/transient)
                     .name("77kkyu111")
                     .build();
             entityManager.persist(member); // 영구저장
             transaction.commit(); // 커밋
-        } catch (Exception e){
+        } catch (Exception e) {
             transaction.rollback();
         } finally {
             entityManager.close();
@@ -90,6 +90,7 @@ public class MemberEntityManager {
         //Member member = em.find(Member.class, 13L);
         Member member1 = entityManager.find(Member.class, 14L);
         System.out.println(member1.getName());
+        System.out.println(member1);
 
     }
 
@@ -100,13 +101,12 @@ public class MemberEntityManager {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("member");
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         EntityTransaction transaction = entityManager.getTransaction();
-        transaction.begin();
-        try{
-
+        try {
+            transaction.begin();
             Member member = entityManager.find(Member.class, 4L);
             entityManager.remove(member);
             transaction.commit(); // 커밋
-        } catch (Exception e){
+        } catch (Exception e) {
             transaction.rollback();
         } finally {
             entityManager.close();
@@ -114,6 +114,5 @@ public class MemberEntityManager {
         entityManagerFactory.close();
 
     }
-
 
 }
