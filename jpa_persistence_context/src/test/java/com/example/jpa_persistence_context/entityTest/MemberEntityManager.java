@@ -31,8 +31,8 @@ public class MemberEntityManager {
             Member member = Member.builder() // 비영속(new/transient)
                     .name("testId")
                     .build();
-            entityManager.persist(member); // 영구저장
-            transaction.commit(); // 커밋
+            entityManager.persist(member); // 영속성 컨텍스트에 저장
+            transaction.commit(); // 커밋 flush() 자동 호출
         } catch (Exception e) {
             transaction.rollback();
         } finally {
@@ -45,30 +45,17 @@ public class MemberEntityManager {
     @Test
     public void 준영속성테스트() {
 
+        // 영속성 컨텍스트가 관리하던 영속 상태의 엔티티 더이상 관리하지 않으면 준영속 상태가 된다.
+        // 특정 엔티티를 준영속 상태로 만드려면 em.datach()를 호출하면 된다.
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("member");
         EntityManager em = emf.createEntityManager();
 
-        try {
-
-            long beforeTime = System.currentTimeMillis();
-            em.find(Member.class, 3L);
-            long afterTime = System.currentTimeMillis();
-            long secDiffTime = (afterTime - beforeTime)/1000;
-            System.out.println("시간차이(m) : "+secDiffTime);
-
-            Member findMember = em.find(Member.class, 3L);
-            em.detach(findMember); // 영속성 컨테스트에 분리해 준영속성으로 변경
-            // em.claer(); // 영속성 콘텍스트를 비워도 관리되던 엔티티는 준영속 상태가 된다.
-            // em.close(); // 영속성 콘텍스트를 종료해도 관리되던 엔티티는 준영속 상태가 된다.
-            long beforeTime1 = System.currentTimeMillis();
-            em.find(Member.class, 3L);
-            long afterTime1 = System.currentTimeMillis();
-            long secDiffTime1 = (afterTime1 - beforeTime1)/1000;
-            System.out.println("시간차이(m)1111 : "+secDiffTime1);
-
-        } catch (Exception e) {
-
-        }
+        em.find(Member.class, 3L);
+        Member findMember = em.find(Member.class, 3L);
+        em.detach(findMember); // 영속성 컨테스트에 분리해 준영속성으로 변경 된다.
+        // em.claer(); // 영속성 콘텍스트를 비워도 관리되던 엔티티는 준영속 상태가 된다.
+        // em.close(); // 영속성 콘텍스트를 종료해도 관리되던 엔티티는 준영속 상태가 된다.
 
     }
 
@@ -77,8 +64,7 @@ public class MemberEntityManager {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("member");
         EntityManager em = emf.createEntityManager();
 
-        //Member member = em.find(Member.class, 13L);
-        Member member1 = entityManager.find(Member.class, 14L);
+        Member member1 = entityManager.find(Member.class, 4L);
         System.out.println(member1.getName());
         System.out.println(member1);
 
