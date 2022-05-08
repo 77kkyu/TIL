@@ -9,16 +9,30 @@
 
 persist를 통해 영속성 컨텍스트에 저장할 수 있습니다
 ``` java
-em.persist(member);
+entityManager.persist(member);
 ```
-영속성 컨텍스트의 특징
+### 영속성 컨텍스트의 특징
 
-엔티티 매니저를 통해 영속성 컨텍스트에 접근하고 관리할 수 있습니다
+- 엔티티 매니저를 통해 영속성 컨텍스트에 접근하고 관리할 수 있습니다
 
 ---
 
-엔티티의 생명주기
+### 엔티티의 생명주기
 - 비영속(new/transient): 영속성 컨텍스트와 전혀 관계가 없는 상태입니다
+    - 엔티티 객체를 생성했지만 아직 영속성 컨텍스트에 저장하지 않은 상태를 비영속(new/transient)라 한다
+    - > Member member = new Member();
 - 영속(managed): 영속성 컨텍스트에 저장된 상태입니다
+    - 엔티티를 영속성 컨텍스트에 저장한 상태를 말하며 영속성 컨텍스트에 의해 관리된다
+    - > entityManager.persist(member);
 - 준영속(detached): 영속성 컨텍스트에 저장되었다가 분리된 상태입니다
+    - 영속성 컨텍스트가 관리하던 영속 상태의 엔티티 더이상 관리하지 않으면 준영속 상태가 된다
+    - > entityManager.detach(member);
+    - > entityManager.claer();
+    - > entityManager.close();
+    - 준영속성 상태가 되면 영속성 컨텍스트가 제공하는 1차 캐시, 쓰기 지연, 변경 감지, 지연 로딩을 사용하지 못한다
 - 삭제(removed): 삭제된 상태입니다
+    - 엔티티를 영속성 컨텍스트와 데이터베이스에서 삭제
+    - > entityManager.remove(member);
+
+
+
