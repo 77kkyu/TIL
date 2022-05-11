@@ -23,6 +23,29 @@ entityManager.persist(member);
   - 변경 감지
   - 지연 로딩
 
+1차 캐시처리 - 영속성 컨텍스트 내부에 캐시가 있고 이를 1차 캐시라고 부릅니다
+데이터베이스의 식별자 값이 1차 캐시의 키 입니다 1차 캐시에서 조회방법은 다음과 같습니다
+``` java
+Member member = entityManager.find(Member.class, "member");
+// 엔티티, 식별 키
+```
+작동 과정 
+- 1차 캐시에서 엔티티를 찾습니다
+- 컨텍스트에 존재하면 캐싱처리된 데이터를 바로 가져옵니다
+- 존재하지 않으면 데이터베이스와 통신을 합니다
+- 데이터베이스에서 가져온 엔티티를 다시 컨텍스트에 저장합니다 
+- 컨텍스트에 저장되어 있는 1차 캐시에서 데이터를 꺼내어 반환합니다
+
+
+동일성 보장 - 엔티티의 동일성을 보장합니다
+``` java
+Member member1 = entityManager.find(Member.class, "member");
+Member member2 = entityManager.find(Member.class, "member");
+System.out.print(member1==member2) // true
+```
+
+
+
 ---
 
 ### 엔티티의 생명주기
