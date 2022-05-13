@@ -23,7 +23,9 @@ entityManager.persist(member);
   - 변경 감지
   - 지연 로딩
 
-1차 캐시 처리 - 영속성 컨텍스트 내부에 캐시가 있고 이를 1차 캐시라고 부릅니다
+### **_`1차 캐시 처리`_**  
+
+영속성 컨텍스트 내부에 캐시가 있고 이를 1차 캐시라고 부릅니다
 데이터베이스의 식별자 값이 1차 캐시의키 입니다 1차 캐시에서 조회방법은 다음과 같습니다
 ``` java
 Member member = entityManager.find(Member.class, "member");
@@ -37,7 +39,9 @@ Member member = entityManager.find(Member.class, "member");
 - 컨텍스트에 저장되어 있는 1차 캐시에서 데이터를 꺼내어 반환합니다
 
 
-동일성 보장 - 엔티티의 동일성을 보장합니다
+### **_`동일성 보장`_**  
+
+엔티티의 동일성을 보장합니다
 ``` java
 Member member1 = entityManager.find(Member.class, "member");
 Member member2 = entityManager.find(Member.class, "member");
@@ -45,6 +49,22 @@ System.out.print(member1==member2) // true
 ```
 
 
+### **_`트랜잭션 쓰기 지연`_**
+
+엔티티 매니저는 커밋이 일어나기 전까지 내부 쿼리 저장소에 INSERT SQL을 가지고 있다
+커밋이 일어나는 순간 데이터베이스에 저장이 되는 것을 쓰기 지연이라고 합니다
+
+
+### **_`변경 감지`_**
+
+JPA로 엔티티를 수정할 때는 단순히 엔티티를 조회해서 데이터를 변경하면 된다
+
+동작 흐름
+1. 트랙잭션을 커밋하면 엔티티 매니저 내부에서 먼저 플러시가 호출된다
+2. 엔티티와 스냅샷을 비교하여 변경된 엔티티를 찾는다
+3. 변경된 엔티티가 있으면 수정 쿼리를 생성해서 쓰기 지연 SQL 저장소에 저장한다
+4. 쓰기 지연 저장소의 SQL을 플러시한다
+5. 데이터베이스 트랜잭션을 커밋한다
 
 ---
 
