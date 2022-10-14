@@ -11,3 +11,5 @@
 [Generic](https://github.com/77kkyu/generic-example-java)
 
 MongoDB
+
+Aws
