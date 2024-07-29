@@ -131,4 +131,4 @@ public <S extends T> S saveAndFlush(S entity) {
 ```
 
 jpa save 구현체에 flush가 없는이유
--> @Transactional에서 commint을 해준다
+-> @Transactional에서 commit을 해준다
